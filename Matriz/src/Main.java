@@ -1,5 +1,4 @@
-import java.util.Scanner;
-public class Main {
+class BigVigenere {
     private int[] key; // Clave numérica
     private char[][] alphabet; // Matriz de cifrado
 
@@ -9,7 +8,7 @@ public class Main {
         generateAlphabet();
     }
 
-    // Metodo para convertir la clave String en un arreglo de enteros
+    // Método para convertir la clave String en un arreglo de enteros
     private int[] convertKey(String numericKey) {
         int[] keyArray = new int[numericKey.length()];
         for (int i = 0; i < numericKey.length(); i++) {
@@ -18,7 +17,7 @@ public class Main {
         return keyArray;
     }
 
-    // Metodo para generar la matriz del alfabeto
+    // Método para generar la matriz del alfabeto
     private void generateAlphabet() {
         int filas = 64;
         int columnas = 64;
@@ -59,7 +58,7 @@ public class Main {
         }
     }
 
-    // Metodo para cifrar un mensaje con la clave numérica
+    // Método para cifrar un mensaje con la clave numérica
     public String encrypt(String message) {
         StringBuilder encrypted = new StringBuilder();
         for (int i = 0; i < message.length(); i++) {
@@ -76,7 +75,7 @@ public class Main {
         return encrypted.toString();
     }
 
-    // Metodo para descifrar un mensaje
+    // Método para descifrar un mensaje
     public String decrypt(String encryptedMessage) {
         StringBuilder decrypted = new StringBuilder();
         for (int i = 0; i < encryptedMessage.length(); i++) {
@@ -94,7 +93,7 @@ public class Main {
         return decrypted.toString();
     }
 
-    // Metodo para buscar la posición de un carácter en la primera fila de la matriz
+    // Método para buscar la posición de un carácter en la primera fila de la matriz
     private int findCharIndex(char c) {
         for (int i = 0; i < alphabet[0].length; i++) {
             if (alphabet[0][i] == c) {
@@ -104,7 +103,7 @@ public class Main {
         return -1; // No encontrado
     }
 
-    // Metodo para encontrar la columna donde está el carácter en la fila de la clave
+    // Método para encontrar la columna donde está el carácter en la fila de la clave
     private int findColumnIndex(int row, char c) {
         for (int i = 0; i < alphabet[row].length; i++) {
             if (alphabet[row][i] == c) {
@@ -114,19 +113,19 @@ public class Main {
         return -1; // No encontrado
     }
 
-    // Metodo search básico
+    // Método search básico
     public char search(int position) {
         int row = position / 64;
         int col = position % 64;
         return alphabet[row][col];
     }
 
-    // Metodo de búsqueda optimizado usando acceso directo
+    // Método de búsqueda optimizado usando acceso directo
     public char optimalSearch(int position) {
         return alphabet[position / 64][position % 64];
     }
 
-    // Metodo para cambiar la clave y re-cifrar un mensaje
+    // Método para cambiar la clave y re-cifrar un mensaje
     public void reEncrypt() {
         java.util.Scanner scanner = new java.util.Scanner(System.in);
         System.out.println("Ingrese el mensaje encriptado:");
@@ -140,5 +139,15 @@ public class Main {
         String reEncryptedMessage = encrypt(decryptedMessage);
         System.out.println("Nuevo mensaje encriptado: " + reEncryptedMessage);
         scanner.close();
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        BigVigenere cipher = new BigVigenere("12345");
+        String encrypted = cipher.encrypt("Hola123");
+        System.out.println("Cifrado: " + encrypted);
+
+        String decrypted = cipher.decrypt(encrypted);
+        System.out.println("Descifrado: " + decrypted);
     }
 }
