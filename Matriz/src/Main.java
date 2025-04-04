@@ -1,27 +1,25 @@
+import java.util.Scanner;
 class BigVigenere {
-    private int[] key; // Clave numérica
-    private char[][] alphabet; // Matriz de cifrado
+    private int[] llave;
+    private char[][] matriz;
 
-    // Constructor que recibe la clave como String
-    public BigVigenere(String numericKey) {
-        this.key = convertKey(numericKey);
-        generateAlphabet();
+    public BigVigenere(String LlaveNumerica) {
+        this.llave = Convertirllave(LlaveNumerica);
+        GenerarMatriz();
     }
 
-    // Método para convertir la clave String en un arreglo de enteros
-    private int[] convertKey(String numericKey) {
-        int[] keyArray = new int[numericKey.length()];
-        for (int i = 0; i < numericKey.length(); i++) {
-            keyArray[i] = Character.getNumericValue(numericKey.charAt(i));
+    private int[] Convertirllave(String LlaveNumerica) {
+        int[] ALlave = new int[LlaveNumerica.length()];
+        for (int i = 0; i < LlaveNumerica.length(); i++) {
+            ALlave[i] = Character.getNumericValue(LlaveNumerica.charAt(i));
         }
-        return keyArray;
+        return ALlave;
     }
 
-    // Método para generar la matriz del alfabeto
-    private void generateAlphabet() {
+    private void GenerarMatriz() {
         int filas = 64;
         int columnas = 64;
-        alphabet = new char[filas][columnas];
+        matriz = new char[filas][columnas];
 
         int count = 0;
         int contador = 0;
@@ -29,25 +27,25 @@ class BigVigenere {
 
         while (true) {
             for (c = 'A'; c <= 'Z' && count < filas * columnas; c++) {
-                alphabet[count / columnas][(count % columnas - contador + columnas) % columnas] = c;
+                matriz[count / columnas][(count % columnas - contador + columnas) % columnas] = c;
                 count++;
                 if (c == 'N' && count < filas * columnas) {
-                    alphabet[count / columnas][(count % columnas - contador + columnas) % columnas] = 'Ñ';
+                    matriz[count / columnas][(count % columnas - contador + columnas) % columnas] = 'Ñ';
                     count++;
                 }
             }
 
             for (c = 'a'; c <= 'z' && count < filas * columnas; c++) {
-                alphabet[count / columnas][(count % columnas - contador + columnas) % columnas] = c;
+                matriz[count / columnas][(count % columnas - contador + columnas) % columnas] = c;
                 count++;
                 if (c == 'n' && count < filas * columnas) {
-                    alphabet[count / columnas][(count % columnas - contador + columnas) % columnas] = 'ñ';
+                    matriz[count / columnas][(count % columnas - contador + columnas) % columnas] = 'ñ';
                     count++;
                 }
             }
 
             for (c = '0'; c <= '9' && count < filas * columnas; c++) {
-                alphabet[count / columnas][(count % columnas - contador + columnas) % columnas] = c;
+                matriz[count / columnas][(count % columnas - contador + columnas) % columnas] = c;
                 count++;
             }
 
@@ -58,96 +56,125 @@ class BigVigenere {
         }
     }
 
-    // Método para cifrar un mensaje con la clave numérica
-    public String encrypt(String message) {
-        StringBuilder encrypted = new StringBuilder();
+    public String Encriptar(String message) {
+        StringBuilder Encriptar = new StringBuilder();
         for (int i = 0; i < message.length(); i++) {
             char msgChar = message.charAt(i);
             int msgIndex = findCharIndex(msgChar);
-            int keyIndex = key[i % key.length];
+            int keyIndex = llave[i % llave.length];
 
             if (msgIndex != -1) {
-                encrypted.append(alphabet[msgIndex][keyIndex]);
+                Encriptar.append(matriz[msgIndex][keyIndex]);
             } else {
-                encrypted.append(msgChar);
+                Encriptar.append(msgChar);
             }
         }
-        return encrypted.toString();
+        return Encriptar.toString();
     }
 
-    // Método para descifrar un mensaje
-    public String decrypt(String encryptedMessage) {
-        StringBuilder decrypted = new StringBuilder();
+    public String Desencriptar(String encryptedMessage) {
+        StringBuilder Desencriptar = new StringBuilder();
         for (int i = 0; i < encryptedMessage.length(); i++) {
             char encChar = encryptedMessage.charAt(i);
-            int keyIndex = key[i % key.length];
+            int keyIndex = llave[i % llave.length];
             int row = keyIndex;
             int col = findColumnIndex(row, encChar);
 
             if (col != -1) {
-                decrypted.append(alphabet[0][col]);
+                Desencriptar.append(matriz[0][col]);
             } else {
-                decrypted.append(encChar);
+                Desencriptar.append(encChar);
             }
         }
-        return decrypted.toString();
+        return Desencriptar.toString();
     }
 
-    // Método para buscar la posición de un carácter en la primera fila de la matriz
     private int findCharIndex(char c) {
-        for (int i = 0; i < alphabet[0].length; i++) {
-            if (alphabet[0][i] == c) {
+        for (int i = 0; i < matriz[0].length; i++) {
+            if (matriz[0][i] == c) {
                 return i;
             }
         }
-        return -1; // No encontrado
+        return -1;
     }
 
-    // Método para encontrar la columna donde está el carácter en la fila de la clave
     private int findColumnIndex(int row, char c) {
-        for (int i = 0; i < alphabet[row].length; i++) {
-            if (alphabet[row][i] == c) {
+        for (int i = 0; i < matriz[row].length; i++) {
+            if (matriz[row][i] == c) {
                 return i;
             }
         }
-        return -1; // No encontrado
+        return -1;
     }
 
-    // Método search básico
     public char search(int position) {
         int row = position / 64;
         int col = position % 64;
-        return alphabet[row][col];
+        return matriz[row][col];
     }
 
-    // Método de búsqueda optimizado usando acceso directo
     public char optimalSearch(int position) {
-        return alphabet[position / 64][position % 64];
+        return matriz[position / 64][position % 64];
     }
 
-    // Método para cambiar la clave y re-cifrar un mensaje
     public void reEncrypt() {
         java.util.Scanner scanner = new java.util.Scanner(System.in);
         System.out.println("Ingrese el mensaje encriptado:");
         String encryptedMessage = scanner.nextLine();
-        String decryptedMessage = decrypt(encryptedMessage);
+        String decryptedMessage = Desencriptar(encryptedMessage);
 
         System.out.println("Ingrese la nueva clave numérica:");
         String newKey = scanner.nextLine();
-        this.key = convertKey(newKey);
+        this.llave = Convertirllave(newKey);
 
-        String reEncryptedMessage = encrypt(decryptedMessage);
+        String reEncryptedMessage = Encriptar(decryptedMessage);
         System.out.println("Nuevo mensaje encriptado: " + reEncryptedMessage);
         scanner.close();
     }
 }
+
 public class Main {
     public static void main(String[] args) {
-        BigVigenere cipher = new BigVigenere("12345");
-        String encrypted = cipher.encrypt("Hola123");
-        System.out.println("Cifrado: " + encrypted);
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            System.out.println(" 1. Encriptar mensaje ");
+            System.out.println(" 2. Desencriptar mensaje ");
+            System.out.println(" 3. Salir ");
+            System.out.print(" Ingrese una opcion: ");
 
-        String decrypted = cipher.decrypt(encrypted);
-        System.out.println("Descifrado: " + decrypted);
+            int opcion = scanner.nextInt();
+            scanner.nextLine();
+
+            if (opcion == 1) {
+                System.out.print(" Texto que desea encriptar: ");
+                String mensaje = scanner.nextLine();
+
+                System.out.print(" Clave: ");
+                String clave = scanner.nextLine();
+
+                BigVigenere cipher = new BigVigenere(clave);
+                String encriptado = cipher.Encriptar(mensaje);
+                System.out.println("Cifrado: " + encriptado);
+
+
+            } else if (opcion == 2) {
+
+                System.out.print(" Texto que desea desencriptar: ");
+                String encriptado = scanner.nextLine();
+
+                System.out.print(" Clave: ");
+                String clave = scanner.nextLine();
+
+                BigVigenere cipher = new BigVigenere(clave);
+                String desencriptar= cipher.Desencriptar(encriptado);
+                System.out.println("Desencriptado: " + desencriptar);
+            } else if (opcion == 3) {
+                break;
+            } else {
+                System.out.println("Opción no válida. Intente de nuevo.");
+            }
+        }
+
     }
 }
+
