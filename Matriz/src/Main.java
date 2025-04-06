@@ -1,3 +1,4 @@
+import java.sql.SQLOutput;
 import java.util.Scanner;
 class BigVigenere {
     private int[] llave;
@@ -56,10 +57,10 @@ class BigVigenere {
         }
     }
 
-    public String Encriptar(String message) {
+    public String Encriptar(String Mensaje) {
         StringBuilder Encriptar = new StringBuilder();
-        for (int i = 0; i < message.length(); i++) {
-            char msgChar = message.charAt(i);
+        for (int i = 0; i < Mensaje.length(); i++) {
+            char msgChar = Mensaje.charAt(i);
             int msgIndex = findCharIndex(msgChar);
             int keyIndex = llave[i % llave.length];
 
@@ -72,13 +73,13 @@ class BigVigenere {
         return Encriptar.toString();
     }
 
-    public String Desencriptar(String encryptedMessage) {
+    public String Desencriptar(String MensajeEnriptado) {
         StringBuilder Desencriptar = new StringBuilder();
-        for (int i = 0; i < encryptedMessage.length(); i++) {
-            char encChar = encryptedMessage.charAt(i);
+        for (int i = 0; i < MensajeEnriptado.length(); i++) {
+            char encChar = MensajeEnriptado.charAt(i);
             int keyIndex = llave[i % llave.length];
-            int row = keyIndex;
-            int col = findColumnIndex(row, encChar);
+            int fila = keyIndex;
+            int col = findColumnIndex(fila, encChar);
 
             if (col != -1) {
                 Desencriptar.append(matriz[0][col]);
@@ -98,38 +99,37 @@ class BigVigenere {
         return -1;
     }
 
-    private int findColumnIndex(int row, char c) {
-        for (int i = 0; i < matriz[row].length; i++) {
-            if (matriz[row][i] == c) {
+    private int findColumnIndex(int fila, char c) {
+        for (int i = 0; i < matriz[fila].length; i++) {
+            if (matriz[fila][i] == c) {
                 return i;
             }
         }
         return -1;
     }
 
-    public char search(int position) {
-        int row = position / 64;
-        int col = position % 64;
-        return matriz[row][col];
+    public char Buscar(int posicion) {
+        int fila = posicion / 64;
+        int columna = posicion % 64;
+        return matriz[fila][columna];
     }
 
-    public char optimalSearch(int position) {
-        return matriz[position / 64][position % 64];
+    public char BusquedaOptima(int posicion) {
+        return matriz[posicion / 64][posicion % 64];
     }
 
-    public void reEncrypt() {
-        java.util.Scanner scanner = new java.util.Scanner(System.in);
+    public void ReEncriptar() {
+        Scanner scanner = new Scanner(System.in);
         System.out.println("Ingrese el mensaje encriptado:");
         String encryptedMessage = scanner.nextLine();
         String decryptedMessage = Desencriptar(encryptedMessage);
 
         System.out.println("Ingrese la nueva clave numérica:");
-        String newKey = scanner.nextLine();
-        this.llave = Convertirllave(newKey);
+        String NuevaLlave = scanner.nextLine();
+        this.llave = Convertirllave(NuevaLlave);
 
-        String reEncryptedMessage = Encriptar(decryptedMessage);
-        System.out.println("Nuevo mensaje encriptado: " + reEncryptedMessage);
-        scanner.close();
+        String ReEncriptarMensaje = Encriptar(decryptedMessage);
+        System.out.println("Nuevo mensaje encriptado: " + ReEncriptarMensaje);
     }
 }
 
@@ -139,7 +139,10 @@ public class Main {
         while (true) {
             System.out.println(" 1. Encriptar mensaje ");
             System.out.println(" 2. Desencriptar mensaje ");
-            System.out.println(" 3. Salir ");
+            System.out.println(" 3. Reencriptar mensaje ");
+            System.out.println(" 4. Buscar letra ");
+            System.out.println(" 5. Busqueda optima de letra ");
+            System.out.println(" 6. Salir ");
             System.out.print(" Ingrese una opcion: ");
 
             int opcion = scanner.nextInt();
@@ -168,13 +171,33 @@ public class Main {
                 BigVigenere cipher = new BigVigenere(clave);
                 String desencriptar= cipher.Desencriptar(encriptado);
                 System.out.println("Desencriptado: " + desencriptar);
+
             } else if (opcion == 3) {
+                System.out.print("Ingrese la clave numérica actual: ");
+                String clave = scanner.nextLine();
+                BigVigenere cipher = new BigVigenere(clave);
+                cipher.ReEncriptar();
+            } else if (opcion==4) {
+                System.out.print("Ingrese la clave numérica actual: ");
+                String clave = scanner.nextLine();
+                BigVigenere cipher = new BigVigenere(clave);
+                System.out.println("Ingrese la posicion de la letra que desea buscar:");
+                int  posicion = scanner.nextInt();
+              char letra = cipher.Buscar(posicion);
+                System.out.println("Letra en la posición " + posicion + ": " + letra);
+            } else if (opcion == 5) {
+                System.out.print("Ingrese la clave numérica actual: ");
+                String clave = scanner.nextLine();
+                BigVigenere cipher = new BigVigenere(clave);
+                System.out.println("Ingrese la posicion de la letra que busca: ");
+                int posicion = scanner.nextInt();
+                char letra = cipher.BusquedaOptima(posicion);
+                System.out.println("Letra en la posición " + posicion + ": " + letra);
+            } else if (opcion == 6) {
                 break;
             } else {
                 System.out.println("Opción no válida. Intente de nuevo.");
             }
         }
-
     }
 }
-
