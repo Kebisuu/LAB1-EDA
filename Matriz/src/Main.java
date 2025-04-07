@@ -48,6 +48,7 @@ class BigVigenere {
         }
     }
     public String Encriptar(String Mensaje) {
+        long tiempoInicio = System.nanoTime();
         StringBuilder Encriptar = new StringBuilder();
         for (int i = 0; i < Mensaje.length(); i++) {
             char msgChar = Mensaje.charAt(i);
@@ -59,9 +60,14 @@ class BigVigenere {
                 Encriptar.append(msgChar);
             }
         }
+        long tiempoFin = System.nanoTime();
+        long tiempoEjecucion = tiempoFin - tiempoInicio;
+        System.out.println("Tiempo de ejecución de GenerarMatriz en nanosegundos: " + tiempoEjecucion);
+        System.out.println("Tiempo de ejecución de GenerarMatriz en milisegundos: " + tiempoEjecucion / 1_000_000);
         return Encriptar.toString();
-    }
+}
     public String Desencriptar(String MensajeEnriptado) {
+        long tiempoInicio = System.nanoTime();
         StringBuilder Desencriptar = new StringBuilder();
         for (int i = 0; i < MensajeEnriptado.length(); i++) {
             char encChar = MensajeEnriptado.charAt(i);
@@ -74,6 +80,10 @@ class BigVigenere {
                 Desencriptar.append(encChar);
             }
         }
+        long tiempoFin = System.nanoTime();
+        long tiempoEjecucion = tiempoFin - tiempoInicio;
+        System.out.println("Tiempo de ejecución de GenerarMatriz en nanosegundos: " + tiempoEjecucion);
+        System.out.println("Tiempo de ejecución de GenerarMatriz en milisegundos: " + tiempoEjecucion / 1_000_000);
         return Desencriptar.toString();
     }
     private int findCharIndex(char c) {
@@ -93,14 +103,25 @@ class BigVigenere {
         return -1;
     }
     public char Buscar(int posicion) {
+        long tiempoInicio = System.nanoTime();
         int fila = posicion / 64;
         int columna = posicion % 64;
+        long tiempoFin = System.nanoTime();
+        long tiempoEjecucion = tiempoFin - tiempoInicio;
+        System.out.println("Tiempo de ejecución de GenerarMatriz en nanosegundos: " + tiempoEjecucion);
+        System.out.println("Tiempo de ejecución de GenerarMatriz en milisegundos: " + tiempoEjecucion / 1_000_000);
         return matriz[fila][columna];
     }
     public char BusquedaOptima(int posicion) {
+        long tiempoInicio = System.nanoTime();
+        long tiempoFin = System.nanoTime();
+        long tiempoEjecucion = tiempoFin - tiempoInicio;
+        System.out.println("Tiempo de ejecución de GenerarMatriz en nanosegundos: " + tiempoEjecucion);
+        System.out.println("Tiempo de ejecución de GenerarMatriz en milisegundos: " + tiempoEjecucion / 1_000_000);
         return matriz[posicion / 64][posicion % 64];
     }
     public void ReEncriptar() {
+        long tiempoInicio = System.nanoTime();
         Scanner scanner = new Scanner(System.in);
         System.out.println("Ingrese el mensaje encriptado:");
         String encryptedMessage = scanner.nextLine();
@@ -110,6 +131,10 @@ class BigVigenere {
         this.llave = Convertirllave(NuevaLlave);
         String ReEncriptarMensaje = Encriptar(decryptedMessage);
         System.out.println("Nuevo mensaje encriptado: " + ReEncriptarMensaje);
+        long tiempoFin = System.nanoTime();
+        long tiempoEjecucion = tiempoFin - tiempoInicio;
+        System.out.println("Tiempo de ejecución de GenerarMatriz en nanosegundos: " + tiempoEjecucion);
+        System.out.println("Tiempo de ejecución de GenerarMatriz en milisegundos: " + tiempoEjecucion / 1_000_000);
     }
 }
 public class Main {
